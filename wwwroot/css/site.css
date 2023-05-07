@@ -1,0 +1,77 @@
+:root {
+  --font-family:  'Roboto Flex', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-family) ;
+  font-size: 16px;
+  margin-bottom: 60px;
+}
+
+/* login & register */
+
+.bg-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.bg-login-page,
+.bg-register-page {
+  background-image: url(../imgs/login_register.jpg); 
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.resaltado {
+  background: #D11717;
+  background: linear-gradient(to right, #D11717 0%, #FF2424 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cantidad_text {
+  font-size: .7rem;
+}
+
+.thead {
+  background-color: rgba(0,0,0,.03) !important;
+  height: 60px;
+}
+
+.fw-900 {
+  font-weight: 900;
+}
+
+.bg-icons {
+  background: #000000; 
+  background: -webkit-linear-gradient(to bottom, #434343, #000000);  
+  background: linear-gradient(to bottom, #434343, #000000); 
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+
+@media screen and (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .login, .register {
+    width: 100% !important;
+  }
+
+  .bg-login-page,
+  .bg-register-page  {
+    display: none;
+  }
+}

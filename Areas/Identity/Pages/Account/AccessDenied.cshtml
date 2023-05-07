@@ -1,0 +1,13 @@
+﻿@page
+@model AccessDeniedModel
+@{
+    ViewData["Title"] = "Acceso denegado";
+    Layout = "_AuthLayout";
+}
+
+<header>
+    <h1 class="fw-bold">@ViewData["Title"]</h1>
+    <p class="lead text-danger">
+        Lo sentimos, pero no tienes acceso a este recurso.
+    </p>
+</header>

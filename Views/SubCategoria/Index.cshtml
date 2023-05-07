@@ -1,0 +1,172 @@
+@{
+  ViewData["Title"] = "Subcategorias";
+}
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalSubcategoria" tabindex="-1" aria-labelledby="modalSubcategoriaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalSubcategoriaTitulo">Subcategoria</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-3 mt-0 fw-bold"> Los campos marcados con un asterisco (<span class="text-danger">*</span>) son obligatorios </p>
+
+        <div class="alert alert-danger d-none" id="errorResumen" role="alert">
+          
+        </div>
+
+        <form id="formModal">
+
+          <input type="hidden" id="subCategoriaId" value="0" />
+
+          <div class="form-group">
+            <label for="subcategoriaDescripcion" class="form-label">
+              Descripcion <span class="text-danger">*</span>
+            </label>
+            <input type="text" name="subcategoriaDescripcion" class="form-control text-dark text-uppercase" id="subcategoriaDescripcion" placeholder="Ingrese una descripcion" autocomplete="off">
+            <p class="form-text small text-danger" id="errorDescripcion"></p>
+          </div>
+
+          <div class="form-group">
+            <label for="CategoriaID" class="form-label"> Categorias <span class="text-danger">*</span> </label>
+            @* <select class="form-select" id="categorias"></select> *@
+            @Html.DropDownList("CategoriaID", null, htmlAttributes: new { @class="form-control text-dark" } )
+            <p class="form-text small text-danger" id="errorCategoria"></p>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" onclick="guardarSubcategoria()" class="btn btn-primary">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="alert alert-danger d-none" id="errorGeneral" role="alert">
+    
+  </div>
+
+  <header class="card-header rounded p-3 d-flex justify-content-between align-items-baseline">
+    <div class="">
+      <h1 class="h3 mb-0 fw-bold"> @ViewData["Title"] </h1>
+      <small id="cantidad_subcategorias" class="cantidad_text text-uppercase text-muted placeholder-glow">
+        <span class="placeholder w-50 rounded"></span>
+      </small>
+    </div>
+
+    <button type="button" onclick="limpiarFormulario()" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#modalSubcategoria">
+      <i class="bi bi-plus"></i> Nueva subcategoria
+    </button>
+  </header>
+
+  <div class="row d-flex justify-content-between bg-white m-0 py-3">
+    <div class="col-md-3">
+     
+    </div>
+
+    <div class="col-md-4">
+      <div class="input-group ">
+        <input type="search" class="form-control text-uppercase" placeholder="Buscar subcategoria" id="buscador">
+        <label for="buscador" class="input-group-text bg-light px-3">
+          <span class="text-muted small" title="Buscador">
+            <i class="bi bi-search"></i>  
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+  
+   <div class="overflow-x-auto">
+  <table class="table table-hover overflow-hidden rounded">
+    <thead class="border-top border-bottom thead">
+      <tr class="align-middle">
+        <th scope="col" class="border-0">Descripcion</th>
+        <th scope="col" class="border-0">Categoria</th>
+        <th scope="col" class="border-0"> </th>
+      </tr>
+    </thead>
+
+    <tbody id="tBody">
+    
+      <tr class="placeholder-glow fs-3">
+        <td> 
+          <span class="placeholder w-75 rounded-2 "></span> 
+        </td>
+        <td> 
+          <span class="placeholder w-50 rounded-2"></span> 
+        </td>
+        <td class="w-25 text-end">
+          <span class="placeholder w-50 rounded-2"></span>
+        </td>
+      </tr>
+
+      <tr class="placeholder-glow fs-3">
+        <td> 
+          <span class="placeholder w-75 rounded-2 "></span> 
+        </td>
+        <td> 
+          <span class="placeholder w-25 rounded-2"></span> 
+        </td>
+        <td class="w-25 text-end">
+          <span class="placeholder w-25 rounded-2"></span>
+          <span class="placeholder w-50 rounded-2"></span>
+        </td>
+      </tr>
+
+      <tr class="placeholder-glow fs-3">
+        <td> 
+          <span class="placeholder w-50 rounded-2 "></span> 
+        </td>
+        <td> 
+          <span class="placeholder w-50 rounded-2"></span> 
+        </td>
+        <td class="w-25 text-end">
+          <span class="placeholder w-25 rounded-2"></span>
+          <span class="placeholder w-50 rounded-2"></span>
+        </td>
+      </tr>
+
+      <tr class="placeholder-glow fs-3">
+        <td> 
+          <span class="placeholder w-100 rounded-2 "></span> 
+        </td>
+        <td> 
+          <span class="placeholder w-25 rounded-2"></span> 
+        </td>
+        <td class="w-25 text-end">
+          <span class="placeholder w-25 rounded-2"></span>
+          <span class="placeholder w-50 rounded-2"></span>
+        </td>
+      </tr>
+
+    </tbody>
+
+    <tfoot id="tFooter">
+      <tr>
+        <td class="text-muted" >
+          
+        </td>
+        <td>
+
+        </td>
+        <td>
+
+        </td>
+      </tr>
+    </tfoot>
+
+</table>
+   </div>
+
+
+@section Scripts {
+  <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
+  <script src="./js/utils.js">  </script>
+  <script src="./js/subcategoria-1.0.0.js">  </script>
+}
