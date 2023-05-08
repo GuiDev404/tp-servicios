@@ -31,7 +31,12 @@ $(document).ready(function() {
   inputBuscador.addEventListener('input', filtrarPorBusqueda)
 
   const TIEMPO_DE_ESPERA = 700;
-  setTimeout(buscarServicios, TIEMPO_DE_ESPERA)
+  setTimeout(function () {
+    buscarServicios()
+
+    const filtros = $('#filtros');
+    filtros.on("change", manejoDeFiltro);
+  }, TIEMPO_DE_ESPERA)
 })
 
 function limpiarFormulario() {
@@ -131,50 +136,53 @@ function buscarServicios (){
 
       servicios.forEach(servicio=> {
 
-      const acciones =  `
-        <td class="text-end">
-          ${!servicio.eliminado
-            ? `
-              <button type="button" class="btn btn-primary btn-sm" onclick="buscarServicio(${servicio.serviciosID})">
-                Editar
-              </button>`
-            : ''
-          }
-          <button type="button" class="btn btn-${servicio.eliminado ? 'success' : 'danger'} btn-sm" onclick="eliminarServicio(${servicio.serviciosID}, ${!servicio.eliminado})">
-            ${servicio.eliminado ? 'Habilitar' : 'Deshabilitar'}
-          </button>
-        </td>
-      `
+        const acciones =  `
+          <td class="text-end">
+            ${!servicio.eliminado
+              ? `
+                <button type="button" class="btn btn-primary btn-sm" onclick="buscarServicio(${servicio.serviciosID})">
+                  Editar
+                </button>`
+              : ''
+            }
+            <button type="button" class="btn btn-${servicio.eliminado ? 'success' : 'danger'} btn-sm" onclick="eliminarServicio(${servicio.serviciosID}, ${!servicio.eliminado})">
+              ${servicio.eliminado ? 'Habilitar' : 'Deshabilitar'}
+            </button>
+          </td>
+        `
 
-      const classDeshabilitado = servicio.eliminado ? 'text-decoration-line-through' : '';
+        const classDeshabilitado = servicio.eliminado ? 'text-decoration-line-through' : '';
 
-      $("#tBody").append(`
-        <tr data-disabled="${servicio.eliminado}">
-          <td class="${classDeshabilitado}">
-            ${servicio.descripcion}
-          </td>
-          <td class="${classDeshabilitado}">
-            ${servicio.direccion}
-          </td>
-          <td class="${classDeshabilitado}">
-            ${servicio.telefono}
-          </td>
-          <td class="">
-            <span class="badge bg-info text-dark ${classDeshabilitado}"> 
-              ${servicio.subCategoriaDescripcion}
-            </span>
-          </td>
-          <td class="">
-            <span class="badge bg-warning text-dark ${classDeshabilitado}">
-              ${servicio.categoriaDescripcion}
-            </span>
-          </td>
-  
-          ${acciones}
-        </tr>
-      `);
+        $("#tBody").append(`
+          <tr data-disabled="${servicio.eliminado}">
+            <td class="${classDeshabilitado}">
+              ${servicio.descripcion}
+            </td>
+            <td class="${classDeshabilitado}">
+              ${servicio.direccion}
+            </td>
+            <td class="${classDeshabilitado}">
+              ${servicio.telefono}
+            </td>
+            <td class="">
+              <span class="badge bg-info text-dark ${classDeshabilitado}"> 
+                ${servicio.subCategoriaDescripcion}
+              </span>
+            </td>
+            <td class="">
+              <span class="badge bg-warning text-dark ${classDeshabilitado}">
+                ${servicio.categoriaDescripcion}
+              </span>
+            </td>
+    
+            ${acciones}
+          </tr>
+        `);
 
       })
+
+      filtrarPorBusqueda(document.querySelector('#buscador').value)
+      manejoDeFiltro()
     },
 
     error : function(error) {

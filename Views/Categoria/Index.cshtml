@@ -56,7 +56,12 @@
 
   <div class="row d-flex justify-content-between bg-white m-0 py-3">
     <div class="col-md-3">
-  
+       <select class="form-select text-uppercase" id="filtros">
+        <option value="PLACEHOLDER" class="text-muted" selected hidden> Seleccione un filtro </option>
+        <option value="TODOS"> Todos </option>
+        <option value="DESHABILITADOS"> <i class="bi bi-eye-slash"></i> Deshabilitados </option>
+        <option value="HABILITADOS"> <i class="bi bi-eye"></i> Habilitados </option>
+      </select>
     </div>
 
     <div class="col-md-4">
