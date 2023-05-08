@@ -24,7 +24,12 @@ $(document).ready(function() {
   inputBuscador.addEventListener('input', filtrarPorBusqueda)
   
   const TIEMPO_DE_ESPERA = 700;
-  setTimeout(buscarCategorias, TIEMPO_DE_ESPERA)
+  setTimeout(function () {
+    buscarCategorias()
+
+    const filtros = $('#filtros');
+    filtros.on("change", manejoDeFiltro);
+  }, TIEMPO_DE_ESPERA)
 })
 
 function limpiarFormulario() {
@@ -153,6 +158,8 @@ function buscarCategorias (){
 
       })
 
+      filtrarPorBusqueda(document.querySelector('#buscador').value)
+      manejoDeFiltro()
     },
 
     error : function(error) {
@@ -188,6 +195,7 @@ function buscarCategoria(categoriaId) {
 }
 
 function eliminarCategoria(id, valor) {
+  // console.log(window.event.target.parentElement.parentElement);
 
   $.ajax({
     url : '../../Categoria/EliminarCategoria',

@@ -26,7 +26,14 @@ $(document).ready(function() {
   inputBuscador.addEventListener('input', filtrarPorBusqueda)
   
   const TIEMPO_DE_ESPERA = 700;
-  setTimeout(buscarSubCategorias, TIEMPO_DE_ESPERA)
+  setTimeout(function () {
+    buscarSubCategorias()
+    
+    const filtros = $('#filtros');
+    filtros.on("change", manejoDeFiltro);
+  }, TIEMPO_DE_ESPERA)
+
+  
 })
 
 function limpiarFormulario() {
@@ -140,47 +147,50 @@ function buscarSubCategorias (){
     success : function(subcategorias) {
 
       const cantidadCategoriasTxt = subcategorias && subcategorias.length 
-      ? `${subcategorias.length} subcategorias`
-      : 'No hay subcategorias';
+        ? `${subcategorias.length} subcategorias`
+        : 'No hay subcategorias';
 
       $('#cantidad_subcategorias').text(cantidadCategoriasTxt);
       $("#tBody").empty();
 
       subcategorias.forEach(subcategoria=> {
 
-      const acciones =  `
-        <td class="text-end">
-          ${!subcategoria.eliminado
-            ? `
-              <button type="button" class="btn btn-primary btn-sm" onclick="buscarSubCategoria(${subcategoria.subCategoriaID})">
-                Editar
-              </button>`
-            : ''
-          }
-          <button type="button" class="btn btn-${subcategoria.eliminado ? 'success' : 'danger'} btn-sm" onclick="eliminarSubCategoria(${subcategoria.subCategoriaID}, ${!subcategoria.eliminado})">
-            ${subcategoria.eliminado ? 'Habilitar' : 'Deshabilitar'}
-          </button>
-        </td>
-      `
+        const acciones =  `
+          <td class="text-end">
+            ${!subcategoria.eliminado
+              ? `
+                <button type="button" class="btn btn-primary btn-sm" onclick="buscarSubCategoria(${subcategoria.subCategoriaID})">
+                  Editar
+                </button>`
+              : ''
+            }
+            <button type="button" class="btn btn-${subcategoria.eliminado ? 'success' : 'danger'} btn-sm" onclick="eliminarSubCategoria(${subcategoria.subCategoriaID}, ${!subcategoria.eliminado})">
+              ${subcategoria.eliminado ? 'Habilitar' : 'Deshabilitar'}
+            </button>
+          </td>
+        `
 
-      $("#tBody").append(`
-        <tr data-disabled="${subcategoria.eliminado}">
-          <td class="${subcategoria.eliminado ? 'text-decoration-line-through' : ''}">
-            ${subcategoria.descripcion}
-          </td>
-          <td>
-            <span class="badge bg-info text-dark ${
-              subcategoria.eliminado ? 'text-decoration-line-through' : ''}"> ${subcategoria.categoriaDescripcion} </span>
-          </td>
-   
-          ${acciones}
-        </tr>
-      `);
+        $("#tBody").append(`
+          <tr data-disabled="${subcategoria.eliminado}">
+            <td class="${subcategoria.eliminado ? 'text-decoration-line-through' : ''}">
+              ${subcategoria.descripcion}
+            </td>
+            <td>
+              <span class="badge bg-info text-dark ${
+                subcategoria.eliminado ? 'text-decoration-line-through' : ''}"> ${subcategoria.categoriaDescripcion} </span>
+            </td>
+    
+            ${acciones}
+          </tr>
+        `);
 
       })
+
+      filtrarPorBusqueda(document.querySelector('#buscador').value)
+      manejoDeFiltro()
     },
 
-    error : function(error) {
+    error: function(error) {
       mostrarErrorGeneral('Lo sentimos. No se pudo recuperar las subcategorias.');
     },
 
@@ -212,6 +222,7 @@ function buscarSubCategoria(subCategoriaId) {
 }
 
 function eliminarSubCategoria(id, valor) {
+
   $.ajax({
     url : '../../SubCategoria/EliminarSubCategoria',
     data : { id, valor },

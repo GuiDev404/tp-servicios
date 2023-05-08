@@ -1,5 +1,5 @@
 function filtrarPorBusqueda(e){
-  const busqueda = e.target.value.trim().toUpperCase();
+  const busqueda = typeof e === 'string' ? e : e.target.value.trim().toUpperCase();
   const filas = [...document.querySelectorAll('#tBody tr')]
 
   filas.forEach(fila=> {
@@ -37,4 +37,26 @@ function mostrarErrorGeneral(mensaje) {
   setTimeout(()=> {
     elementoAlerta.addClass('d-none')
   }, 3000)
+}
+
+function manejoDeFiltro() {
+  const filtros = document.querySelector('#filtros')
+  
+  if(filtros !== null){
+    const filtroSeleccionado = filtros.value;
+    
+    const options = {
+      'TODOS': document.querySelectorAll('#tBody tr:not(d-none)'),
+      'DESHABILITADOS': document.querySelectorAll('#tBody tr[data-disabled="true"]:not(d-none)'),
+      'HABILITADOS': document.querySelectorAll('#tBody tr[data-disabled="false"]:not(d-none)')
+    }
+  
+    if(filtroSeleccionado !== 'PLACEHOLDER'){
+      options['TODOS'].forEach(e=> e.classList.add('filtro-hide'))
+ 
+      options[filtroSeleccionado].forEach(e=> e.classList.remove('filtro-hide'))
+    }
+  
+  }
+ 
 }
