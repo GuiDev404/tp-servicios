@@ -23,10 +23,24 @@ namespace Servicio.Controllers
 
     public IActionResult Index()
     {
-      List<SubCategoria> subcategorias = _contexto.SubCategorias.Where(c=> !c.Eliminado).ToList();
+      // List<SubCategoria> subcategorias = _contexto.SubCategorias.Where(c=> !c.Eliminado).ToList();
+      // ViewBag.SubCategoriaID = new SelectList(subcategorias, "SubCategoriaID", "Descripcion"); 
 
-      ViewBag.SubCategoriaID = new SelectList(subcategorias, "SubCategoriaID", "Descripcion"); 
+      List<Categoria> categorias = _contexto.Categorias.Where(c=> !c.Eliminado).ToList();
+      ViewBag.CategoriaID = new SelectList(categorias, "CategoriaID", "Descripcion"); 
       return View();
+    }
+
+    public JsonResult BuscarSubCategorias(int categoriaId = 0){
+      List<SubCategoria> subcategorias = new List<SubCategoria>();
+
+      if(categoriaId != 0){
+        subcategorias = _contexto.SubCategorias
+          .Where(s=> !s.Eliminado && s.CategoriaID == categoriaId)
+          .ToList();
+      }
+
+      return Json(subcategorias);
     }
 
     public JsonResult GuardarServicio(int id, string descripcion, string direccion, string telefono, int subCategoriaId)

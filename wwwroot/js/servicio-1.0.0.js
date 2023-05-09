@@ -17,13 +17,13 @@ $(document).ready(function() {
       servicioDescripcion: "required",
       servicioDireccion: "required",
       servicioTelefono: "required",
-      SubCategoriaID: "required",
+      subCategoriaId: "required",
     },
     messages: {
       servicioDescripcion: "La descripción del servicio es requerida. Ingrese una.",
       servicioDireccion: "La direccion del servicio es requerida. Ingrese una.",
       servicioTelefono: "El telefono del servicio es requerido. Ingrese uno.",
-      SubCategoriaID: "La subcategoria es requerida. Ingrese una.",
+      subCategoriaId: "La subcategoria es requerida. Ingrese una.",
     },
   })
   
@@ -37,6 +37,13 @@ $(document).ready(function() {
     const filtros = $('#filtros');
     filtros.on("change", manejoDeFiltro);
   }, TIEMPO_DE_ESPERA)
+
+  const selectCategorias = $("#CategoriaID")
+  buscarSubCategorias(selectCategorias.val() || 0);
+
+  selectCategorias.on('change', function (){
+    buscarSubCategorias(this.value || 0);
+  })
 })
 
 function limpiarFormulario() {
@@ -73,7 +80,7 @@ function guardarServicio() {
       descripcion: data.servicioDescripcion,
       direccion: data.servicioDireccion,
       telefono: data.servicioTelefono,
-      subCategoriaId: data.SubCategoriaID
+      subCategoriaId: data.subCategoriaId
     },
     type : 'POST',
     dataType : 'json',
@@ -240,6 +247,32 @@ function eliminarServicio(id, valor) {
     error : function(error) {
       // console.log(error);
       mostrarErrorGeneral('Lo sentimos no se pudo eliminar el servicio.')
+    },
+  });
+}
+
+function buscarSubCategorias(categoriaId) {
+  
+  $.ajax({
+    url : `../../Servicio/BuscarSubCategorias?categoriaId=${categoriaId}`,
+    // data: { categoriaId },
+    type : 'GET',
+    dataType : 'json',
+    success : function(subcategorias) {
+
+      const subcategoriasHTML = subcategorias.filter(c=> !c.eliminado).map(categoria=> 
+        `<option value="${categoria.subCategoriaID}"> 
+          ${categoria.descripcion} 
+        </option>`
+      ).join('\n')
+
+      const categoriasSelect = document.getElementById('subcategorias')
+      categoriasSelect.innerHTML = `
+        ${subcategoriasHTML}
+      `;
+    },
+    error : function(error) {
+      // alert('Disculpe, existió un problema', error);
     },
   });
 }
