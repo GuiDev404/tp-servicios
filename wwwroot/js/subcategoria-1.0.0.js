@@ -57,6 +57,8 @@ function guardarSubcategoria() {
   const descripcion = $("#subcategoriaDescripcion").val()
   const categoriaSeleccionada = $("#CategoriaID").val()
   
+  const tituloAccion = $('.modal-title').text()
+
   if(!$('#formModal').valid()){
     return;
   }
@@ -111,7 +113,11 @@ function guardarSubcategoria() {
 
       buscarSubCategorias();
       $("#modalSubcategoria").modal('hide');
-
+      toast({ 
+        type: 'success',
+        title: tituloAccion,
+        message: 'Subcategoria guardada correctamente.'
+      })
 
       // if(resultado){
       //   buscarSubCategorias();
@@ -127,7 +133,8 @@ function guardarSubcategoria() {
     error: function(error) {
       // console.log(error);
       $("#modalSubcategoria").modal('hide');
-      mostrarErrorGeneral('Lo sentimos, algo salio mal.');
+      // mostrarErrorGeneral('Lo sentimos, algo salio mal.');
+      toast({ type: 'error', title: tituloAccion, message: 'Lo sentimos, algo salio mal.' })
     },
 
     // código a ejecutar sin importar si la petición falló o no
@@ -191,7 +198,13 @@ function buscarSubCategorias (){
     },
 
     error: function(error) {
-      mostrarErrorGeneral('Lo sentimos. No se pudo recuperar las subcategorias.');
+      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar las subcategorias.');
+      
+      toast({ 
+        type: 'error', 
+        title: 'Busqueda de subcategorias',
+        message: 'Lo sentimos. No se pudo recuperar las subcategorias.'
+      })
     },
 
   });
@@ -216,7 +229,12 @@ function buscarSubCategoria(subCategoriaId) {
       }
     },
     error : function(xhr, status) {
-      mostrarErrorGeneral('Lo sentimos. No se pudo recuper la subcategoria.');
+      // mostrarErrorGeneral('Lo sentimos. No se pudo recuper la subcategoria.');
+      toast({ 
+        type: 'error',
+        title: 'Buscar subcategoria',
+        message: 'Lo sentimos. No se pudo recuper la subcategoria.'
+      })
     },
   });
 }
@@ -238,13 +256,19 @@ function eliminarSubCategoria(id, valor) {
           '4': 'No se puede eliminar la subcategoria porque existe en un servicio. Elimine primero este.'
         }
         
-        mostrarErrorGeneral(mensajes?.[resultado])
+        // mostrarErrorGeneral(mensajes?.[resultado])
+        toast({ type: 'error', title: 'Eliminar subcategoria', message: mensajes?.[resultado] })
       }
     },
 
     error : function(error) {
       // console.log(error);
-      mostrarErrorGeneral('Lo sentimos no se pudo eliminar la subcategoria.')
+      // mostrarErrorGeneral('Lo sentimos no se pudo eliminar la subcategoria.')
+      toast({ 
+        type: 'error',
+        title: 'Eliminar subcategoria',
+        message: 'Lo sentimos. No se pudo eliminar la subcategoria.'
+      })
     },
   });
 }

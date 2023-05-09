@@ -30,6 +30,7 @@ $(document).ready(function() {
     const filtros = $('#filtros');
     filtros.on("change", manejoDeFiltro);
   }, TIEMPO_DE_ESPERA)
+
 })
 
 function limpiarFormulario() {
@@ -45,6 +46,8 @@ function limpiarFormulario() {
 function guardarCategoria() {
   const id = Number($("#categoriaId").val())
   const descripcion = $("#categoriaDescripcion").val()
+
+  const tituloAccion = $('.modal-title').text()
 
   if(!$('#formCategoria').valid()){
     return;
@@ -93,6 +96,7 @@ function guardarCategoria() {
 
       buscarCategorias();
       $("#modalCategoria").modal('hide');
+      toast({ type: 'success', title: tituloAccion, message: 'Categoria guardada correctamente.' })
       
       // if(resultado){
       //   buscarCategorias();
@@ -105,7 +109,9 @@ function guardarCategoria() {
     error : function(error) {
       // console.log(error);
       $("#modalCategoria").modal('hide');
-      mostrarErrorGeneral('Lo sentimos, algo salio mal.');
+      toast({ type: 'error', title: tituloAccion, message: 'Lo sentimos, algo salio mal.' })
+
+      // mostrarErrorGeneral('Lo sentimos, algo salio mal.');
     },
   });
 }
@@ -164,7 +170,12 @@ function buscarCategorias (){
 
     error : function(error) {
       // console.log(error);
-      mostrarErrorGeneral('Lo sentimos. No se pudo recuperar las categorias.');
+      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar las categorias.');
+      toast({ 
+        type: 'error',
+        title: 'Busqueda de categorias',
+        message: 'Lo sentimos. No se pudo recuperar las categorias.'
+      })
     },
 
   });
@@ -189,13 +200,17 @@ function buscarCategoria(categoriaId) {
     },
     error: function(xhr, status) {
       // console.log({ xhr, status });
-      mostrarErrorGeneral('Lo sentimos. No se pudo recuper la categoria.');
+      // mostrarErrorGeneral('Lo sentimos. No se pudo recuper la categoria.');
+      toast({ 
+        type: 'error',
+        title: 'Buscar categoria',
+        message: 'Lo sentimos. No se pudo recuper la categoria.'
+      })
     },
   });
 }
 
 function eliminarCategoria(id, valor) {
-  // console.log(window.event.target.parentElement.parentElement);
 
   $.ajax({
     url : '../../Categoria/EliminarCategoria',
@@ -214,12 +229,21 @@ function eliminarCategoria(id, valor) {
         '4': 'No se puede eliminar la categoria porque existe en una subcategoria. Elimine primero esta.'
       }
       
-      mostrarErrorGeneral(mensajes?.[resultado])
+      // mostrarErrorGeneral(mensajes?.[resultado])
+      
+      toast({ type: 'error', title: 'Eliminar categoria', message: mensajes?.[resultado] })
     },
 
     error : function(error) {
       // console.log(error);
-      mostrarErrorGeneral('Lo sentimos no se pudo eliminar la categoria.')
+      // mostrarErrorGeneral('Lo sentimos no se pudo eliminar la categoria.')
+
+      toast({ 
+        type: 'error',
+        title: 'Eliminar categoria',
+        message: 'Lo sentimos no se pudo eliminar la categoria.'
+      })
+
     },
   });
 }
