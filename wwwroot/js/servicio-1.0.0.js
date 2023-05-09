@@ -68,6 +68,8 @@ function guardarServicio() {
     acc[elemento.name] = elemento.value
     return acc;
   }, {});
+
+  const tituloAccion = $('.modal-title').text()
   
   if(!$('#formModal').valid()){
     return;
@@ -116,11 +118,17 @@ function guardarServicio() {
 
       buscarServicios();
       $("#modal").modal('hide');
+      toast({ 
+        type: 'success',
+        title: tituloAccion,
+        message: 'Servicio guardado correctamente.'
+      })
 
     },
     error : function(error) {
       $("#modal").modal('hide');
-      mostrarErrorGeneral('Lo sentimos, algo salio mal.');
+      // mostrarErrorGeneral('Lo sentimos, algo salio mal.');
+      toast({ type: 'error', title: tituloAccion, message: 'Lo sentimos, algo salio mal.' })
     },
   });
 }
@@ -193,7 +201,12 @@ function buscarServicios (){
     },
 
     error : function(error) {
-      mostrarErrorGeneral('Lo sentimos. No se pudo recuperar los servicios.');
+      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar los servicios.');
+      toast({ 
+        type: 'error',
+        title: 'Busqueda de servicios',
+        message: 'Lo sentimos. No se pudo recuperar los servicios.'
+      })
     },
 
   });
@@ -220,7 +233,12 @@ function buscarServicio(servicioId) {
       }
     },
     error : function(_xhr, _status) {
-      mostrarErrorGeneral('Lo sentimos. No se pudo recuperar el servicio.');
+      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar el servicio.');
+      toast({ 
+        type: 'error',
+        title: 'Buscar servicio',
+        message: 'Lo sentimos. No se pudo recuper el servicio.'
+      })
     },
   });
 }
@@ -240,13 +258,19 @@ function eliminarServicio(id, valor) {
           '3': 'No se pudo eliminar el servicio.',
         }
         
-        mostrarErrorGeneral(mensajes?.[resultado])
+        // mostrarErrorGeneral(mensajes?.[resultado])
+        toast({ type: 'error', title: 'Eliminar servicio', message: mensajes?.[resultado] })
       }
     },
 
     error : function(error) {
       // console.log(error);
-      mostrarErrorGeneral('Lo sentimos no se pudo eliminar el servicio.')
+      // mostrarErrorGeneral('Lo sentimos no se pudo eliminar el servicio.')
+      toast({ 
+        type: 'error',
+        title: 'Eliminar servicio',
+        message: 'Lo sentimos no se pudo eliminar el servicio.'
+      })
     },
   });
 }

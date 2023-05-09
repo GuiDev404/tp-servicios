@@ -60,3 +60,20 @@ function manejoDeFiltro() {
   }
  
 }
+
+function toast({ type, message, title }) {
+  Swal.fire({
+    title: title,
+    text: message,
+    icon: type,
+    toast: true,
+    position: "bottom-end",
+    timer: 4000,
+    timerProgressBar: true,
+    showConfirmButton: false,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  });
+}

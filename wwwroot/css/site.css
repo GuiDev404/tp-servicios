@@ -62,6 +62,10 @@ body {
   display: none !important;
 }
 
+.swal2-container {
+  width: 500px !important;
+}
+
 @media screen and (min-width: 768px) {
   html {
     font-size: 16px;
