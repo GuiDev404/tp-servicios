@@ -140,13 +140,13 @@ namespace Ezpeleta2023.Controllers {
       
       if (subcategoria != null)
       {
-        if(subcategoria.Eliminado == true){
+        if(subcategoria.Eliminado){
           subcategoria.Eliminado = false;
           _contexto.SaveChanges();
           resultado = Resultados.Ok;
         } else {
-          // NO SE PUEDEN ELIMINAR SUBCATEGORIAS SI TIENEN SERVICIOS ACTIVOS
-          var cantidadServicios = (from s in _contexto.Servicios where s.SubCategoriaID == id && s.Eliminado == false select s).Count();
+          // NO SE PUEDEN ELIMINAR LA SUBCATEGORIA SI ESTA EN SERVICIOS ACTIVOS
+          int cantidadServicios = (from s in _contexto.Servicios where s.SubCategoriaID == id && s.Eliminado == false select s).Count();
 
           if(cantidadServicios == 0){
             subcategoria.Eliminado = true;

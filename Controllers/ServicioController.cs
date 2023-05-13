@@ -145,7 +145,8 @@ namespace Servicio.Controllers
           SubCategoriaID = servicio.SubCategoria.SubCategoriaID,
           SubCategoriaDescripcion = servicio.SubCategoria.Descripcion,
           SubCategoriaEliminado = servicio.SubCategoria.Eliminado,
-          CategoriaDescripcion = servicio.SubCategoria.Categoria.Descripcion
+          CategoriaDescripcion = servicio.SubCategoria.Categoria.Descripcion,
+          CategoriaID = servicio.SubCategoria.Categoria.CategoriaID,
         };
 
         serviciosParaVista.Add(viewModel);

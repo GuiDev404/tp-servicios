@@ -40,25 +40,14 @@ function limpiarFormulario() {
   $("#categoriaDescripcion-error").text("")
 }
 
-// -------------------------------
 // ------------ CRUD -------------
-// -------------------------------
 function guardarCategoria() {
   const id = Number($("#categoriaId").val())
   const descripcion = $("#categoriaDescripcion").val()
 
   const tituloAccion = $('.modal-title').text()
 
-  if(!$('#formCategoria').valid()){
-    return;
-  }
-
-  // if(!descripcion.trim()){
-  //   $("#errorDescripcion").text("La descripcion de la categoria es requerida.")
-  //   return;
-  // }
-
-  // $("#errorDescripcion").text("")
+  if(!$('#formCategoria').valid()) return;
 
   $.ajax({
     url : '../../Categoria/GuardarCategoria',
@@ -66,7 +55,6 @@ function guardarCategoria() {
     type : 'POST',
     dataType : 'json',
     success : function(resultado) {
-      // console.log(resultado);
 
       if(resultado > 0){
         const mensajes = {
@@ -96,27 +84,28 @@ function guardarCategoria() {
 
       buscarCategorias();
       $("#modalCategoria").modal('hide');
-      toast({ type: 'success', title: tituloAccion, message: 'Categoria guardada correctamente.' })
-      
-      // if(resultado){
-      //   buscarCategorias();
-      //   $("#modalCategoria").modal('hide');
-      // } else {
-      //   $("#errorDescripcion").text("Existe una Categoría con la misma descripción.")
-      // }
+
+      toast({ 
+        type: 'success',
+        title: tituloAccion,
+        message: 'Categoria guardada correctamente.'
+      })
     },
 
-    error : function(error) {
-      // console.log(error);
+    error : function(_error) {
       $("#modalCategoria").modal('hide');
-      toast({ type: 'error', title: tituloAccion, message: 'Lo sentimos, algo salio mal.' })
 
-      // mostrarErrorGeneral('Lo sentimos, algo salio mal.');
+      toast({ 
+        type: 'error',
+        title: tituloAccion,
+        message: 'Lo sentimos, algo salio mal.'
+      })
     },
   });
 }
 
 function buscarCategorias (){
+  const cantidadCategorias = $('#cantidad_categorias');
 
   $.ajax({
     url : '../../Categoria/BuscarCategorias',
@@ -128,7 +117,7 @@ function buscarCategorias (){
         ? `${categorias.length} categorias`
         : 'No hay categorias';
 
-      $('#cantidad_categorias').text(cantidadCategoriasTxt);
+      cantidadCategorias.text(cantidadCategoriasTxt);
 
       $("#tBody").empty();
 
@@ -169,13 +158,15 @@ function buscarCategorias (){
     },
 
     error : function(error) {
-      // console.log(error);
-      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar las categorias.');
       toast({ 
         type: 'error',
         title: 'Busqueda de categorias',
         message: 'Lo sentimos. No se pudo recuperar las categorias.'
       })
+
+      $('#tBody').html('')
+      $('#tFooter tr td:first-child').text('No se encontraron categorias')
+      cantidadCategorias.html('No hay categorias');
     },
 
   });
@@ -199,8 +190,6 @@ function buscarCategoria(categoriaId) {
 
     },
     error: function(xhr, status) {
-      // console.log({ xhr, status });
-      // mostrarErrorGeneral('Lo sentimos. No se pudo recuper la categoria.');
       toast({ 
         type: 'error',
         title: 'Buscar categoria',
@@ -229,21 +218,19 @@ function eliminarCategoria(id, valor) {
         '4': 'No se puede eliminar la categoria porque existe en una subcategoria. Elimine primero esta.'
       }
       
-      // mostrarErrorGeneral(mensajes?.[resultado])
-      
-      toast({ type: 'error', title: 'Eliminar categoria', message: mensajes?.[resultado] })
+      toast({
+        type: 'error',
+        title: 'Eliminar categoria', 
+        message: mensajes?.[resultado] 
+      })
     },
 
-    error : function(error) {
-      // console.log(error);
-      // mostrarErrorGeneral('Lo sentimos no se pudo eliminar la categoria.')
-
+    error : function(_error) {
       toast({ 
         type: 'error',
         title: 'Eliminar categoria',
         message: 'Lo sentimos no se pudo eliminar la categoria.'
       })
-
     },
   });
 }

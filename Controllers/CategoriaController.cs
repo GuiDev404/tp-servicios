@@ -114,13 +114,13 @@ namespace Ezpeleta2023.Controllers
       Categoria? categoria = _contexto.Categorias.Find(id);
       if (categoria != null)
       {
-        if(categoria.Eliminado == true){
+        if(categoria.Eliminado){
           categoria.Eliminado = false;
           _contexto.SaveChanges();
           resultado = Resultados.Ok;
         } else {
-          // NO SE PUEDEN ELIMINAR CATEGORIAS SI TIENEN SUBCATEGORIAS ACTIVAS
-          var cantidadSubcategorias = (from s in _contexto.SubCategorias where s.CategoriaID == id && s.Eliminado == false select s).Count();
+          // NO SE PUEDEN ELIMINAR LA CATEGORIA SI ESTA EN SUBCATEGORIAS ACTIVAS
+          int cantidadSubcategorias = (from s in _contexto.SubCategorias where s.CategoriaID == id && s.Eliminado == false select s).Count();
 
           if(cantidadSubcategorias == 0){
             categoria.Eliminado = true;

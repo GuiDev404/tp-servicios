@@ -50,7 +50,12 @@ function limpiarFormulario() {
   const formularioModal = document.getElementById("formModal")
   formularioModal.reset();
   $("#servicioId").val(0);
-  $("#subcategorias").val(0);
+  
+  const categorias = document.querySelector("#CategoriaID")
+  categorias.options.selectedIndex = 0;
+  buscarSubCategorias(categorias.value);
+  
+  // $("#subcategorias").val(0);
 
   // LIMPIAR MENSAJES DE ERROR
   $("#servicioDescripcion-error").text("")
@@ -59,9 +64,7 @@ function limpiarFormulario() {
   $("#subcategorias-error").text("")
 }
 
-// -------------------------------
-// --------- CRUD -------------
-// -------------------------------
+// ------------ CRUD --------------
 function guardarServicio() {
   const formularioModal = document.getElementById("formModal")
   const data = [...formularioModal.elements].reduce((acc, elemento)=> {
@@ -71,9 +74,7 @@ function guardarServicio() {
 
   const tituloAccion = $('.modal-title').text()
   
-  if(!$('#formModal').valid()){
-    return;
-  }
+  if(!$('#formModal').valid()) return;
 
   $.ajax({
     url : '../../Servicio/GuardarServicio',
@@ -87,7 +88,6 @@ function guardarServicio() {
     type : 'POST',
     dataType : 'json',
     success : function(resultado) {
-      // console.log(resultado);
 
       if(resultado > 0){
         const mensajes = {
@@ -125,15 +125,15 @@ function guardarServicio() {
       })
 
     },
-    error : function(error) {
+    error : function(_error) {
       $("#modal").modal('hide');
-      // mostrarErrorGeneral('Lo sentimos, algo salio mal.');
       toast({ type: 'error', title: tituloAccion, message: 'Lo sentimos, algo salio mal.' })
     },
   });
 }
 
 function buscarServicios (){
+  const cantidadServicios = $('#cantidad_servicios');
 
   $.ajax({
     url : '../../Servicio/BuscarServicios',
@@ -146,7 +146,7 @@ function buscarServicios (){
         ? `${servicios.length} servicios`
         : 'No hay servicios';
 
-      $('#cantidad_servicios').text(cantidadServiciosTxt);
+      cantidadServicios.text(cantidadServiciosTxt);
       $("#tBody").empty();
 
       servicios.forEach(servicio=> {
@@ -201,12 +201,15 @@ function buscarServicios (){
     },
 
     error : function(error) {
-      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar los servicios.');
       toast({ 
         type: 'error',
         title: 'Busqueda de servicios',
         message: 'Lo sentimos. No se pudo recuperar los servicios.'
       })
+
+      $('#tBody').html('')
+      $('#tFooter tr td:first-child').text('No se encontraron servicios')
+      cantidadServicios.html('No hay servicios')
     },
 
   });
@@ -227,13 +230,14 @@ function buscarServicio(servicioId) {
         $("#servicioDireccion").val(servicio.direccion)
         $("#servicioTelefono").val(servicio.telefono)
 
-        $("#subcategorias").val(servicio.subCategoriaID)
+        $("#CategoriaID").val(servicio.categoriaID)
+        buscarSubCategorias(servicio.categoriaID, servicio.subCategoriaID)
+        // $("#subcategorias").val(servicio.subCategoriaID)
 
         $("#modal").modal("show");
       }
     },
     error : function(_xhr, _status) {
-      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar el servicio.');
       toast({ 
         type: 'error',
         title: 'Buscar servicio',
@@ -258,14 +262,11 @@ function eliminarServicio(id, valor) {
           '3': 'No se pudo eliminar el servicio.',
         }
         
-        // mostrarErrorGeneral(mensajes?.[resultado])
         toast({ type: 'error', title: 'Eliminar servicio', message: mensajes?.[resultado] })
       }
     },
 
-    error : function(error) {
-      // console.log(error);
-      // mostrarErrorGeneral('Lo sentimos no se pudo eliminar el servicio.')
+    error : function(_error) {
       toast({ 
         type: 'error',
         title: 'Eliminar servicio',
@@ -275,7 +276,7 @@ function eliminarServicio(id, valor) {
   });
 }
 
-function buscarSubCategorias(categoriaId) {
+function buscarSubCategorias(categoriaId, selectedValue) {
   
   $.ajax({
     url : `../../Servicio/BuscarSubCategorias?categoriaId=${categoriaId}`,
@@ -294,9 +295,13 @@ function buscarSubCategorias(categoriaId) {
       categoriasSelect.innerHTML = `
         ${subcategoriasHTML}
       `;
+
+      if(selectedValue){
+        categoriasSelect.value = selectedValue;
+      } 
     },
-    error : function(error) {
-      // alert('Disculpe, existió un problema', error);
+    error : function(_error) {
+      // console.error(error);
     },
   });
 }

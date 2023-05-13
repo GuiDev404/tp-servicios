@@ -33,11 +33,9 @@ $(document).ready(function() {
     filtros.on("change", manejoDeFiltro);
   }, TIEMPO_DE_ESPERA)
 
-  
 })
 
 function limpiarFormulario() {
-
   $("#subCategoriaId").val(0)
   $("#subcategoriaDescripcion").val("")
   $("#subcategoriaDescripcion-error").text("")
@@ -49,9 +47,7 @@ function limpiarFormulario() {
   $("#errorResumen").addClass('d-none')
 }
 
-// -------------------------------
-// --------- CRUD -------------
-// -------------------------------
+// ------------- CRUD -------------
 function guardarSubcategoria() {
   const id = Number($("#subCategoriaId").val())
   const descripcion = $("#subcategoriaDescripcion").val()
@@ -59,23 +55,7 @@ function guardarSubcategoria() {
   
   const tituloAccion = $('.modal-title').text()
 
-  if(!$('#formModal').valid()){
-    return;
-  }
-
-  // if(!descripcion.trim()){
-  //   $("#errorDescripcion").text("La descripcion de la subcategoria es requerida.")
-  //   return;
-  // }
-
-  // // ANTES: categoriaSeleccionada === '0'
-  // if(categoriaSeleccionada === null){
-  //   $("#errorCategoria").text("La categoria es requerida. Seleccione una.")
-  //   return;
-  // }
-
-  // $("#errorDescripcion").text("")
-  // $("#errorCategoria").text("")
+  if(!$('#formModal').valid()) return;
 
   $.ajax({
     url : '../../SubCategoria/GuardarSubCategoria',
@@ -119,33 +99,16 @@ function guardarSubcategoria() {
         message: 'Subcategoria guardada correctamente.'
       })
 
-      // if(resultado){
-      //   buscarSubCategorias();
-      //   $("#modalSubcategoria").modal('hide');
-      // } else {
-      //   $("#errorDescripcion").text("Existe una subcategoria con la misma descripción.")
-
-      //   setTimeout(()=> {
-      //     $("#errorDescripcion").text("")
-      //   }, 2000)
-      // }
     },
-    error: function(error) {
-      // console.log(error);
+    error: function(_error) {
       $("#modalSubcategoria").modal('hide');
-      // mostrarErrorGeneral('Lo sentimos, algo salio mal.');
       toast({ type: 'error', title: tituloAccion, message: 'Lo sentimos, algo salio mal.' })
     },
-
-    // código a ejecutar sin importar si la petición falló o no
-    // complete : function(xhr, status) {
-    //     alert('Petición realizada');
-    // }
   });
 }
 
 function buscarSubCategorias (){
-
+  const cantidadSubcategorias = $('#cantidad_subcategorias')
   $.ajax({
     url : '../../SubCategoria/BuscarSubCategorias',
     data : {  },
@@ -157,7 +120,7 @@ function buscarSubCategorias (){
         ? `${subcategorias.length} subcategorias`
         : 'No hay subcategorias';
 
-      $('#cantidad_subcategorias').text(cantidadCategoriasTxt);
+        cantidadSubcategorias.text(cantidadCategoriasTxt);
       $("#tBody").empty();
 
       subcategorias.forEach(subcategoria=> {
@@ -198,13 +161,15 @@ function buscarSubCategorias (){
     },
 
     error: function(error) {
-      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar las subcategorias.');
-      
       toast({ 
         type: 'error', 
         title: 'Busqueda de subcategorias',
         message: 'Lo sentimos. No se pudo recuperar las subcategorias.'
       })
+
+      $('#tBody').html('')
+      $('#tFooter tr td:first-child').text('No se encontraron subcategorias')
+      cantidadSubcategorias.html('No hay subcategorias')
     },
 
   });
@@ -229,7 +194,7 @@ function buscarSubCategoria(subCategoriaId) {
       }
     },
     error : function(xhr, status) {
-      // mostrarErrorGeneral('Lo sentimos. No se pudo recuper la subcategoria.');
+
       toast({ 
         type: 'error',
         title: 'Buscar subcategoria',
@@ -256,14 +221,11 @@ function eliminarSubCategoria(id, valor) {
           '4': 'No se puede eliminar la subcategoria porque existe en un servicio. Elimine primero este.'
         }
         
-        // mostrarErrorGeneral(mensajes?.[resultado])
         toast({ type: 'error', title: 'Eliminar subcategoria', message: mensajes?.[resultado] })
       }
     },
 
-    error : function(error) {
-      // console.log(error);
-      // mostrarErrorGeneral('Lo sentimos no se pudo eliminar la subcategoria.')
+    error : function(_error) {
       toast({ 
         type: 'error',
         title: 'Eliminar subcategoria',

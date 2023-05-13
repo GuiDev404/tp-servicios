@@ -2,53 +2,47 @@
   ViewData["Title"] = "Subcategorias";
 }
 
-
-<!-- Modal -->
-<div class="modal fade" id="modalSubcategoria" tabindex="-1" aria-labelledby="modalSubcategoriaLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalSubcategoriaTitulo">Subcategoria</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p class="mb-3 mt-0 fw-bold"> Los campos marcados con un asterisco (<span class="text-danger">*</span>) son obligatorios </p>
-
-        <div class="alert alert-danger d-none" id="errorResumen" role="alert">
-          
+  <div class="modal fade" id="modalSubcategoria" tabindex="-1" aria-labelledby="modalSubcategoriaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalSubcategoriaTitulo">Subcategoria</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          <p class="mb-3 mt-0 fw-bold"> Los campos marcados con un asterisco (<span class="text-danger">*</span>) son obligatorios </p>
 
-        <form id="formModal">
-
-          <input type="hidden" id="subCategoriaId" value="0" />
-
-          <div class="form-group">
-            <label for="subcategoriaDescripcion" class="form-label">
-              Descripcion <span class="text-danger">*</span>
-            </label>
-            <input type="text" name="subcategoriaDescripcion" class="form-control text-dark text-uppercase" id="subcategoriaDescripcion" placeholder="Ingrese una descripcion" autocomplete="off">
-            <p class="form-text small text-danger" id="errorDescripcion"></p>
+          <div class="alert alert-danger d-none" id="errorResumen" role="alert">
+            
           </div>
 
-          <div class="form-group">
-            <label for="CategoriaID" class="form-label"> Categorias <span class="text-danger">*</span> </label>
-            @* <select class="form-select" id="categorias"></select> *@
-            @Html.DropDownList("CategoriaID", null, htmlAttributes: new { @class="form-control text-dark" } )
-            <p class="form-text small text-danger" id="errorCategoria"></p>
-          </div>
+          <form id="formModal">
 
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" onclick="guardarSubcategoria()" class="btn btn-primary">Guardar cambios</button>
+            <input type="hidden" id="subCategoriaId" value="0" />
+
+            <div class="form-group">
+              <label for="subcategoriaDescripcion" class="form-label">
+                Descripcion <span class="text-danger">*</span>
+              </label>
+              <input type="text" name="subcategoriaDescripcion" class="form-control text-dark text-uppercase" id="subcategoriaDescripcion" placeholder="Ingrese una descripcion" autocomplete="off">
+              <p class="form-text small text-danger" id="errorDescripcion"></p>
+            </div>
+
+            <div class="form-group">
+              <label for="CategoriaID" class="form-label"> Categorias <span class="text-danger">*</span> </label>
+              @* <select class="form-select" id="categorias"></select> *@
+              @Html.DropDownList("CategoriaID", null, htmlAttributes: new { @class="form-control text-dark" } )
+              <p class="form-text small text-danger" id="errorCategoria"></p>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" onclick="guardarSubcategoria()" class="btn btn-primary">Guardar cambios</button>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
-  <div class="alert alert-danger d-none" id="errorGeneral" role="alert">
-    
   </div>
 
   <header class="card-header rounded p-3 d-flex justify-content-between align-items-baseline">
@@ -59,14 +53,15 @@
       </small>
     </div>
 
-    <button type="button" onclick="limpiarFormulario()" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#modalSubcategoria">
-      <i class="bi bi-plus"></i> Nueva subcategoria
+    <button type="button" onclick="limpiarFormulario()" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalSubcategoria">
+      <i class="bi bi-plus"></i>
+      <span class="d-none d-sm-inline-block"> Nueva subcategoria </span>
     </button>
   </header>
 
   <div class="row d-flex justify-content-between bg-white m-0 py-3">
-    <div class="col-md-3">
-     <select class="form-select text-uppercase" id="filtros">
+    <div class="col-sm-6 col-lg-3">
+     <select class="form-select text-uppercase mb-2 mb-md-0" id="filtros">
         <option value="PLACEHOLDER" class="text-muted" selected hidden> Seleccione un filtro </option>
         <option value="TODOS"> Todos </option>
         <option value="DESHABILITADOS"> <i class="bi bi-eye-slash"></i> Deshabilitados </option>
@@ -74,7 +69,7 @@
       </select>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-sm-6 col-lg-4">
       <div class="input-group ">
         <input type="search" class="form-control text-uppercase" placeholder="Buscar subcategoria" id="buscador">
         <label for="buscador" class="input-group-text bg-light px-3">
@@ -86,7 +81,7 @@
     </div>
   </div>
   
-   <div class="overflow-x-auto">
+  <div class="overflow-x-auto">
   <table class="table table-hover overflow-hidden rounded">
     <thead class="border-top border-bottom thead">
       <tr class="align-middle">
@@ -165,8 +160,8 @@
       </tr>
     </tfoot>
 
-</table>
-   </div>
+  </table>
+  </div>
 
 
 @section Scripts {

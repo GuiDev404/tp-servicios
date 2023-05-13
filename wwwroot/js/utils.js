@@ -25,20 +25,6 @@ function filtrarPorBusqueda(e){
 
 }
 
-function mostrarErrorGeneral(mensaje) {
-  if(mensaje && !mensaje.trim()) return;
-
-  const elementoAlerta = $('#errorGeneral')
-
-  elementoAlerta
-    .text(mensaje)
-    .removeClass('d-none')
-
-  setTimeout(()=> {
-    elementoAlerta.addClass('d-none')
-  }, 3000)
-}
-
 function manejoDeFiltro() {
   const filtros = document.querySelector('#filtros')
   
