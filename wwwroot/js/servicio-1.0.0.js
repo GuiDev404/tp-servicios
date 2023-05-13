@@ -64,9 +64,7 @@ function limpiarFormulario() {
   $("#subcategorias-error").text("")
 }
 
-// -------------------------------
-// --------- CRUD -------------
-// -------------------------------
+// ------------ CRUD --------------
 function guardarServicio() {
   const formularioModal = document.getElementById("formModal")
   const data = [...formularioModal.elements].reduce((acc, elemento)=> {
@@ -76,9 +74,7 @@ function guardarServicio() {
 
   const tituloAccion = $('.modal-title').text()
   
-  if(!$('#formModal').valid()){
-    return;
-  }
+  if(!$('#formModal').valid()) return;
 
   $.ajax({
     url : '../../Servicio/GuardarServicio',
@@ -92,7 +88,6 @@ function guardarServicio() {
     type : 'POST',
     dataType : 'json',
     success : function(resultado) {
-      // console.log(resultado);
 
       if(resultado > 0){
         const mensajes = {
@@ -130,9 +125,8 @@ function guardarServicio() {
       })
 
     },
-    error : function(error) {
+    error : function(_error) {
       $("#modal").modal('hide');
-      // mostrarErrorGeneral('Lo sentimos, algo salio mal.');
       toast({ type: 'error', title: tituloAccion, message: 'Lo sentimos, algo salio mal.' })
     },
   });
@@ -238,14 +232,12 @@ function buscarServicio(servicioId) {
 
         $("#CategoriaID").val(servicio.categoriaID)
         buscarSubCategorias(servicio.categoriaID, servicio.subCategoriaID)
-
         // $("#subcategorias").val(servicio.subCategoriaID)
 
         $("#modal").modal("show");
       }
     },
     error : function(_xhr, _status) {
-      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar el servicio.');
       toast({ 
         type: 'error',
         title: 'Buscar servicio',
@@ -270,14 +262,11 @@ function eliminarServicio(id, valor) {
           '3': 'No se pudo eliminar el servicio.',
         }
         
-        // mostrarErrorGeneral(mensajes?.[resultado])
         toast({ type: 'error', title: 'Eliminar servicio', message: mensajes?.[resultado] })
       }
     },
 
-    error : function(error) {
-      // console.log(error);
-      // mostrarErrorGeneral('Lo sentimos no se pudo eliminar el servicio.')
+    error : function(_error) {
       toast({ 
         type: 'error',
         title: 'Eliminar servicio',
@@ -311,8 +300,8 @@ function buscarSubCategorias(categoriaId, selectedValue) {
         categoriasSelect.value = selectedValue;
       } 
     },
-    error : function(error) {
-      // alert('Disculpe, existió un problema', error);
+    error : function(_error) {
+      // console.error(error);
     },
   });
 }
