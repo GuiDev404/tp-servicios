@@ -50,7 +50,12 @@ function limpiarFormulario() {
   const formularioModal = document.getElementById("formModal")
   formularioModal.reset();
   $("#servicioId").val(0);
-  $("#subcategorias").val(0);
+  
+  const categorias = document.querySelector("#CategoriaID")
+  categorias.options.selectedIndex = 0;
+  buscarSubCategorias(categorias.value);
+  
+  // $("#subcategorias").val(0);
 
   // LIMPIAR MENSAJES DE ERROR
   $("#servicioDescripcion-error").text("")
@@ -231,7 +236,10 @@ function buscarServicio(servicioId) {
         $("#servicioDireccion").val(servicio.direccion)
         $("#servicioTelefono").val(servicio.telefono)
 
-        $("#subcategorias").val(servicio.subCategoriaID)
+        $("#CategoriaID").val(servicio.categoriaID)
+        buscarSubCategorias(servicio.categoriaID, servicio.subCategoriaID)
+
+        // $("#subcategorias").val(servicio.subCategoriaID)
 
         $("#modal").modal("show");
       }
@@ -279,7 +287,7 @@ function eliminarServicio(id, valor) {
   });
 }
 
-function buscarSubCategorias(categoriaId) {
+function buscarSubCategorias(categoriaId, selectedValue) {
   
   $.ajax({
     url : `../../Servicio/BuscarSubCategorias?categoriaId=${categoriaId}`,
@@ -298,6 +306,10 @@ function buscarSubCategorias(categoriaId) {
       categoriasSelect.innerHTML = `
         ${subcategoriasHTML}
       `;
+
+      if(selectedValue){
+        categoriasSelect.value = selectedValue;
+      } 
     },
     error : function(error) {
       // alert('Disculpe, existió un problema', error);
