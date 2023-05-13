@@ -145,7 +145,7 @@ function guardarSubcategoria() {
 }
 
 function buscarSubCategorias (){
-
+  const cantidadSubcategorias = $('#cantidad_subcategorias')
   $.ajax({
     url : '../../SubCategoria/BuscarSubCategorias',
     data : {  },
@@ -157,7 +157,7 @@ function buscarSubCategorias (){
         ? `${subcategorias.length} subcategorias`
         : 'No hay subcategorias';
 
-      $('#cantidad_subcategorias').text(cantidadCategoriasTxt);
+        cantidadSubcategorias.text(cantidadCategoriasTxt);
       $("#tBody").empty();
 
       subcategorias.forEach(subcategoria=> {
@@ -198,13 +198,15 @@ function buscarSubCategorias (){
     },
 
     error: function(error) {
-      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar las subcategorias.');
-      
       toast({ 
         type: 'error', 
         title: 'Busqueda de subcategorias',
         message: 'Lo sentimos. No se pudo recuperar las subcategorias.'
       })
+
+      $('#tBody').html('')
+      $('#tFooter tr td:first-child').text('No se encontraron subcategorias')
+      cantidadSubcategorias.html('No hay subcategorias')
     },
 
   });

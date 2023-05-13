@@ -134,6 +134,7 @@ function guardarServicio() {
 }
 
 function buscarServicios (){
+  const cantidadServicios = $('#cantidad_servicios');
 
   $.ajax({
     url : '../../Servicio/BuscarServicios',
@@ -146,7 +147,7 @@ function buscarServicios (){
         ? `${servicios.length} servicios`
         : 'No hay servicios';
 
-      $('#cantidad_servicios').text(cantidadServiciosTxt);
+      cantidadServicios.text(cantidadServiciosTxt);
       $("#tBody").empty();
 
       servicios.forEach(servicio=> {
@@ -201,12 +202,15 @@ function buscarServicios (){
     },
 
     error : function(error) {
-      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar los servicios.');
       toast({ 
         type: 'error',
         title: 'Busqueda de servicios',
         message: 'Lo sentimos. No se pudo recuperar los servicios.'
       })
+
+      $('#tBody').html('')
+      $('#tFooter tr td:first-child').text('No se encontraron servicios')
+      cantidadServicios.html('No hay servicios')
     },
 
   });

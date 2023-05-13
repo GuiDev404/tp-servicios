@@ -117,6 +117,7 @@ function guardarCategoria() {
 }
 
 function buscarCategorias (){
+  const cantidadCategorias = $('#cantidad_categorias');
 
   $.ajax({
     url : '../../Categoria/BuscarCategorias',
@@ -128,7 +129,7 @@ function buscarCategorias (){
         ? `${categorias.length} categorias`
         : 'No hay categorias';
 
-      $('#cantidad_categorias').text(cantidadCategoriasTxt);
+      cantidadCategorias.text(cantidadCategoriasTxt);
 
       $("#tBody").empty();
 
@@ -169,13 +170,16 @@ function buscarCategorias (){
     },
 
     error : function(error) {
-      // console.log(error);
-      // mostrarErrorGeneral('Lo sentimos. No se pudo recuperar las categorias.');
       toast({ 
         type: 'error',
         title: 'Busqueda de categorias',
         message: 'Lo sentimos. No se pudo recuperar las categorias.'
       })
+
+      $('#tBody').html('')
+      $('#tFooter tr td:first-child').text('No se encontraron categorias')
+      cantidadCategorias.html('No hay categorias');
+
     },
 
   });
