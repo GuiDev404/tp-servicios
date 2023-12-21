@@ -8,4 +8,5 @@
 - [x] Solucionar problemas de margin en la barra de filtros en modo responsivo 
 - [x] Agregar el valor correcto a la subcategoria al editar un servicio
 - [x] Remover codigo viejo comentado o sin usar
-- [ ] Arreglar busqueda + filtrado a la vez, mal funcionamiento. O buscar una libreria que lo haga
+- [x] Busqueda + filtrado a la vez (vanilla), mal funcionamiento (ver usando query params, URLSearchParams, popstate event)
+- [x] Agregue datatable

@@ -24,8 +24,12 @@ namespace Ezpeleta2023.Controllers {
     public IActionResult Index()
     {
       List<Categoria> categorias = _contexto.Categorias.Where(c=> !c.Eliminado).ToList();
+      categorias.Add(new Categoria {
+        CategoriaID = 0,
+        Descripcion = "[SELECCIONE UNA CATEGORIA]"
+      });
 
-      ViewBag.CategoriaID = new SelectList(categorias, "CategoriaID", "Descripcion"); 
+      ViewBag.CategoriaID = new SelectList(categorias.OrderBy(c=> c.CategoriaID), "CategoriaID", "Descripcion", 0); 
 
       return View();
     }

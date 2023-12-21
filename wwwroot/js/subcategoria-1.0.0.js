@@ -1,3 +1,5 @@
+
+
 $(document).ready(function() {
   $("#modalSubcategoria").on('hide.bs.modal', function(){
     limpiarFormulario()
@@ -14,26 +16,47 @@ $(document).ready(function() {
     errorClass: 'text-danger small d-block mt-1',
     rules: {
       subcategoriaDescripcion: "required", 
-      CategoriaID: "required" 
+      CategoriaID: {
+        required: true,
+        selected: true
+      },
     },
     messages: {
       subcategoriaDescripcion: "La descripción para la subcategoria es requerida. Ingrese una.",
-      CategoriaID: "La categoria para la subcategoria es requerida. Seleccione una."
+      CategoriaID: {
+        required: "La categoria para la subcategoria es requerida. Seleccione una.",
+        selected: 'Seleccione una categoria'
+      }
     }
   })
   
-  const inputBuscador = document.getElementById('buscador')
-  inputBuscador.addEventListener('input', filtrarPorBusqueda)
+  // const inputBuscador = document.getElementById('buscador')
+  // inputBuscador.addEventListener('input', filtrarPorBusqueda)
   
   const TIEMPO_DE_ESPERA = 700;
   setTimeout(function () {
     buscarSubCategorias()
     
-    const filtros = $('#filtros');
-    filtros.on("change", manejoDeFiltro);
+    // const filtros = $('#filtros');
+    // filtros.on("change", manejoDeFiltro);
   }, TIEMPO_DE_ESPERA)
 
 })
+
+const configDatatable = {
+  lengthMenu: [5, 10, 25, 50],
+  columnDefs: [
+    { target: 2, searchable: false, orderable: false, width: 200 } 
+  ],
+  language: {
+    url: "//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json",
+    info: "Registros del _START_ al _END_ de _TOTAL_",
+  },
+}
+
+new DataTable('#tabla_subcategoria', configDatatable);
+
+
 
 function limpiarFormulario() {
   $("#subCategoriaId").val(0)
@@ -121,6 +144,8 @@ function buscarSubCategorias (){
         : 'No hay subcategorias';
 
         cantidadSubcategorias.text(cantidadCategoriasTxt);
+
+      $('#tabla_subcategoria').DataTable().destroy();
       $("#tBody").empty();
 
       subcategorias.forEach(subcategoria=> {
@@ -156,8 +181,10 @@ function buscarSubCategorias (){
 
       })
 
-      filtrarPorBusqueda(document.querySelector('#buscador').value)
-      manejoDeFiltro()
+      $('#tabla_subcategoria').DataTable(configDatatable);
+
+      // filtrarPorBusqueda(document.querySelector('#buscador').value)
+      // manejoDeFiltro()
     },
 
     error: function(error) {

@@ -20,18 +20,33 @@ $(document).ready(function() {
     },
   })
   
-  const inputBuscador = document.getElementById('buscador')
-  inputBuscador.addEventListener('input', filtrarPorBusqueda)
+  // const inputBuscador = document.getElementById('buscador')
+  // inputBuscador.addEventListener('input', filtrarPorBusqueda)
   
   const TIEMPO_DE_ESPERA = 700;
   setTimeout(function () {
     buscarCategorias()
 
-    const filtros = $('#filtros');
-    filtros.on("change", manejoDeFiltro);
+    // const filtros = $('#filtros');
+    // filtros.on("change", manejoDeFiltro);
+
+    
   }, TIEMPO_DE_ESPERA)
 
 })
+
+const configDatatable = {
+  lengthMenu: [5, 10, 25, 50],
+  columnDefs: [
+    { target: 1, searchable: false, orderable: false, width: 200 } 
+  ],
+  language: {
+    url: "//cdn.datatables.net/plug-ins/1.10.22/i18n/Spanish.json",
+    info: "Registros del _START_ al _END_ de _TOTAL_",
+  },
+}
+let datatableCategoria = new DataTable('#tabla_categoria', configDatatable);
+
 
 function limpiarFormulario() {
 
@@ -48,6 +63,7 @@ function guardarCategoria() {
   const tituloAccion = $('.modal-title').text()
 
   if(!$('#formCategoria').valid()) return;
+
 
   $.ajax({
     url : '../../Categoria/GuardarCategoria',
@@ -119,6 +135,11 @@ function buscarCategorias (){
 
       cantidadCategorias.text(cantidadCategoriasTxt);
 
+      $('#tabla_categoria').DataTable().destroy();
+      // if ($.fn.DataTable.isDataTable($('#tabla_categoria'))) {
+      //     $('#tabla_categoria').DataTable().destroy();
+      // }
+
       $("#tBody").empty();
 
       categorias.forEach(categoria=> {
@@ -143,7 +164,7 @@ function buscarCategorias (){
           `
 
         $("#tBody").append(`
-          <tr data-disabled="${categoria.eliminado}">
+          <tr>
             <td class="${categoria.eliminado ? 'text-decoration-line-through' : ''}">
               ${categoria.descripcion}
             </td>
@@ -151,10 +172,37 @@ function buscarCategorias (){
           </tr>
         `);
 
+        
       })
 
-      filtrarPorBusqueda(document.querySelector('#buscador').value)
-      manejoDeFiltro()
+      $('#tabla_categoria').DataTable(configDatatable);
+
+
+      // const rows = categorias.map(categoria=> {
+        
+      //   const acciones = categoria.eliminado
+      //     ? `
+      //         <button type="button" class="btn btn-success btn-sm" onclick="eliminarCategoria(${categoria.categoriaID}, false)">
+      //           Habilitar
+      //         </button>
+      //       `
+      //     : `
+      //         <button type="button" class="btn btn-primary btn-sm" onclick="buscarCategoria(${categoria.categoriaID})">
+      //           Editar
+      //         </button>
+      //         <button type="button" class="btn btn-danger btn-sm" onclick="eliminarCategoria(${categoria.categoriaID}, true)">
+      //           Deshabilitar
+      //         </button>
+      //     `
+
+      //     return {
+      //       'Descripcion': categoria.descripcion,
+      //       'Acciones': acciones,
+      //     }
+      // });
+      
+  
+ 
     },
 
     error : function(error) {

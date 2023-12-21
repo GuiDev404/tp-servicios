@@ -27,15 +27,14 @@ $(document).ready(function() {
     },
   })
   
-  const inputBuscador = document.getElementById('buscador')
-  inputBuscador.addEventListener('input', filtrarPorBusqueda)
+  // const inputBuscador = document.getElementById('buscador')
+  // inputBuscador.addEventListener('input', filtrarPorBusqueda)
 
   const TIEMPO_DE_ESPERA = 700;
   setTimeout(function () {
     buscarServicios()
 
-    const filtros = $('#filtros');
-    filtros.on("change", manejoDeFiltro);
+    // $('#filtros').on("change", manejoDeFiltro);
   }, TIEMPO_DE_ESPERA)
 
   const selectCategorias = $("#CategoriaID")
@@ -196,8 +195,8 @@ function buscarServicios (){
 
       })
 
-      filtrarPorBusqueda(document.querySelector('#buscador').value)
-      manejoDeFiltro()
+      // filtrarPorBusqueda(document.querySelector('#buscador').value)
+      // manejoDeFiltro()
     },
 
     error : function(error) {
@@ -305,3 +304,86 @@ function buscarSubCategorias(categoriaId, selectedValue) {
     },
   });
 }
+
+$('#filtros').on('change', function (e){
+  if(e.target !== null){
+    const filtroSeleccionado = e.target.value;
+
+    const params = new URL(window.location.href)
+    params.searchParams.set('filter', filtroSeleccionado.toLowerCase());
+    
+    window.history.pushState({ ...window.history.state, filtro: filtroSeleccionado }, 'query-filter', params.href)
+    window.dispatchEvent(new Event('popstate'));
+  }
+})
+
+$('#buscador').on('input', function (e){
+  if(e.target !== null){
+    const keyword = e.target.value;
+
+    const params = new URL(window.location.href)
+    params.searchParams.set('q', keyword.toLowerCase());
+    
+    window.history.pushState({ ...window.history.state, busqueda: keyword }, 'query-filter', params.href)
+    window.dispatchEvent(new Event('popstate'));
+  }
+})
+
+function busquedaFiltros (){
+  const currentURL = new URL(this.window.location.href);
+  const params = currentURL.searchParams;
+  
+  const q = params.get('q')?.toUpperCase();
+  const filter = params.get('filter')?.toUpperCase();
+ 
+  const noResultContent = document.querySelector('#tFooter tr > td'); 
+  const rows = {
+    'TODOS': document.querySelectorAll('#tBody tr'),
+    'DESHABILITADOS': document.querySelectorAll('#tBody tr[data-disabled="true"]'),
+    'HABILITADOS': document.querySelectorAll('#tBody tr[data-disabled="false"]')
+  }
+
+  noResultContent.classList.add('d-none');
+
+  if(filter || q){
+    rows.TODOS.forEach(t=> t.classList.add('d-none'))
+
+    const rowsSelected = Array.from(rows?.[filter?.toUpperCase()] ?? rows.TODOS);
+
+    rowsSelected.forEach(fila=> {
+      fila.classList.remove('d-none')
+      
+      if(q){
+        fila.classList.add('d-none')
+        // CELDAS DONDE SE HARA LA BUSQUEDA (TODAS LAS CELDAS MENOS LA DE LOS BOTONES)
+        const tds = fila.querySelectorAll('td:not(:last-child)')
+        
+        // AL MENOS UNA CELDA(<td>) COINCIDE CON LA BUSQUEDA
+        const busquedaOk = [...tds].some(td=> td.innerText.trim().toUpperCase().includes(q.toUpperCase()))
+        if(busquedaOk){
+          fila.classList.remove('d-none')
+        }
+
+        // NINGUNA FILA(<tr>) TIENE COINCIDENCIA
+        const noHayResultados = rowsSelected.every(tr=> tr.classList.contains('d-none'))
+
+        if(noHayResultados){
+          noResultContent.classList.remove('d-none') 
+          noResultContent.innerHTML = `No hay resultados para <strong> ${q} </strong>` 
+        }
+        
+      }
+    })
+  }
+
+}
+
+window.addEventListener('popstate', busquedaFiltros)
+window.addEventListener('DOMContentLoaded', function (){
+  const params = new URLSearchParams(this.window.location.search);
+
+  $('#filtros').val(params.get('filter')?.toUpperCase() ?? 'PLACEHOLDER')
+  $('#buscador').val(params.get('q') ?? '')
+
+  busquedaFiltros()
+}) 
